@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Доступные тесты{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<a class="btn btn-primary" href="/quiz/start/1">Пройти тест номер 1</a>
+<a class="btn btn-secondary" href="/quiz/start/1">Пройти тест номер 2</a>
+{% endblock %}
