@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+<form action="/" method="post" class="form-register">
+<p> {{ form.login.label() }} {{ form.login() }}
+<p> {{ form.email.label() }} {{ form.email() }}
+<p> {{ form.password.label() }} {{ form.password() }}
+<p> {{ form.repeated_password.label() }} {{ form.repeated_password() }}
+<p> {{ form.submit() }}
+</form>
+{% endblock %}
