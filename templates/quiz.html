@@ -7,14 +7,13 @@
 
 {% block content %}
 
-{% if question['type'] == 'variants' %}
-<div class="container align-content-center justify-content-start" style="width: 100vw; height: 100vh">
-  <h2>{{question['text']}}</h2>
+<div class="container align-content-center justify-content-center" style="width: 100vw; height: 100vh">
+  <h2>{{question['question']}}</h2>
   
   {% for row in question['rows'] %}
   <div class="row">
     {% for col in row %}
-    <form action="/" enctype="application/json" method="POST">
+    <form action="/quiz" enctype="application/json" method="POST">
       <input type="hidden" name="answer" value={{ col }}>
       <input type="submit" class="col btn btn-primary btn-quiz btn-lg" value={{ col }}>
     </form>
@@ -23,19 +22,4 @@
   {% endfor %}
 
 </div>
-
-{% elif question['type'] == 'string' %}
-<div class="container justify-content-center d-flex align-content-center flex-wrap" style="width: 100vw; height: 100vh">
-  <h2 class="row">{{question['text']}}</h2>
-  <div class="row input-group input-group-lg">
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="inputGroup-sizing-lg">Type answer &#x2192</span>
-    </div>
-    <input type="text" class="form-control" aria-label="Type your answer" aria-describedby="inputGroup-sizing-lg">
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" id="button-answer">Answer</button>
-    </div>
-  </div>
-</div>
-{% endif %}
 {% endblock %}

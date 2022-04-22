@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить тест{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<body>
+    <h2 id="header"></h2>
+    <form action="" method="POST" id="quiz-form">
+      {{ form.hidden_tag() }}
+      <a hidden>{{ form.submit(type="submit", class="btn btn-primary") }}</a>
+      <!-- Name of test input -->
+      {{ form.name.label }}<a style="color:red">*</a>
+      {{ form.name(class="form-control form-control-lg") }}
+      {% for error in form.name.errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+      <!-- description of test input -->
+      {{ form.description.label }}
+      {{ form.description(class="form-control") }}
+      {% for error in form.description.errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endfor %}
+      <!-- questions input -->
+      <div class="question container">
+        <input id="q-0" class="row form-control" type="text" placeholder="Вопрос" />
+        <input
+          id="a-0"
+          class="row form-control"
+          type="text"
+          placeholder="Правильный ответ"
+        />
+        <div id="answer-container-0" class="row">
+          <input type="text" class="col form-control form-control-sm ans-input" placeholder="Вариант ответа"/>
+        </div>
+        <a id="add-v0" class="row align-self-end btn btn-secondary" onclick="addNewAns(0)">
+          Добавить еще один вариант ответа
+        </a>
+      </div>
+      <a id="add-q" class="btn btn-primary">Добавить еще один Вопрос</a>
+      <a class="btn btn-primary" onclick="postQuiz()">Добавить тест</a>
+      <div>{{ message }}</div>
+    </form>
+
+    <script>
+        let questions = 0
+
+        function addNewAns(index) {
+          let input = document.createElement("input");
+          input.className = "col form-control form-control-sm ans-input";
+          input.type = "text";
+          input.placeholder = "Вариант ответа"
+  
+          document
+            .getElementById(`answer-container-${index}`)
+            .insertAdjacentElement("beforeend", input);
+        }
+
+        function addNewQuestion() {
+          questions += 1;
+          let question = document.createElement("div");
+          question.className = "question container";
+          
+          question.innerHTML = `<input id="q-${questions}" class="row form-control" type="text" placeholder="Вопрос" />
+          <input
+            id="a-${questions}"
+            class="row form-control"
+            type="text"
+            placeholder="Правильный ответ"
+          />
+          <div id="answer-container-${questions}" class="row">
+            <input type="text" class="col form-control form-control-sm ans-input" placeholder="Вариант ответа"/>
+          </div>
+          <a id="add-v-${questions}" class="row align-self-end btn btn-secondary" onclick="addNewAns(${questions})">
+            Добавить еще один вариант ответа
+          </a>`;
+
+          Array.from(document.getElementsByClassName("question"))
+            .pop()
+            .after(question);
+        }
+
+        function collectQuestions() {
+          let all_questions = Array();
+          for (let i = 0; i < questions + 1; i++) {
+            let variants = Array();
+            for (child of document.getElementById(`answer-container-${i}`).childNodes) {
+              if (child.tagName == "INPUT") {variants.push(child.value)};
+            }
+
+            all_questions.push({"question": document.getElementById(`q-${i}`).value,
+                                "answer": document.getElementById(`a-${i}`).value,
+                                "variants": variants});
+          }
+          return JSON.stringify(all_questions)
+        }
+
+        function postQuiz() {
+          document.getElementById("questions").value = collectQuestions();
+          document.getElementById("submit").click()
+        }
+        document.getElementById("add-q").onclick = addNewQuestion;
+       
+      </script>
+</body>
+{% endblock %}

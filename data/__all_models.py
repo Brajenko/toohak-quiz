@@ -1,3 +1,2 @@
-from . import jobs
 from . import users
-from . import department
+from . import quizes
