@@ -14,6 +14,8 @@ class Completion(SqlAlchemyBase):
                                 sqlalchemy.ForeignKey("users.id"), nullable=False)
     quiz_id = sqlalchemy.Column(sqlalchemy.Integer, 
                                 sqlalchemy.ForeignKey("quizes.id"), nullable=False)
+    score = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    percents = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
     quiz = orm.relation('Quiz')

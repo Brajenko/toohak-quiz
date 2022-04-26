@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Доступные тесты{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+{% block header %}{% endblock %}
+
+{% for quiz in quizes %}
+
+<div class="container quiz-card md-2 border-bottom my-2 pb-2">
+  <div class="row">
+    <h1 class="col-5 justify-content-md-center">{{ quiz[0].name }}</h1>
+    <p class="col">
+      {{ quiz[0].description }}<br />
+      автор: <strong>{{ quiz[0].user.login }}</strong>
+    </p>
+  </div>
+  <div class="row justify-content-md-end">
+    {% if quiz[0].user.id == current_user.id %}
+    <h5 class="col" style="color:darkgray;">
+      Вы не можете пройти свой тест
+    </h5>
+    {% elif quiz[1] %}
+    <h5 class="col" style="color: darkturquoise;">
+      Текущий лучший результат: {{'%0.2f'| format(quiz[1])}}%
+    </h5>
+    {% else %}
+    <h5 class="col" style="color: brown;">
+      Вы еще не проходили этот тест
+    </h5>
+    {% endif %}
+
+    <a href="/quiz/start/{{ quiz[0].id }}" class="col-3 btn btn-success {% if quiz[0].user.id == current_user.id %}disabled{% endif %}"
+      >Пройти</a
+    >
+  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

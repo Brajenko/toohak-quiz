@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Доступные тесты{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Таблица лидеров</h1>
+<h3 class="text-center">Зарабатывайте очки проходя тесты!</h3>
+<table class="table table-hover text-center">
+    <thead>
+      <tr>
+        <th scope="col-auto">#</th>
+        <th scope="col-auto">Логин</th>
+        <th scope="col-auto">Количество очков</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in leaders %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ user.login }}</td>
+        <td>{{'%0.2f'| format(user.points)}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

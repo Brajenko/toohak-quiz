@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'view_quizes.html' %}
 
-{% block title %}Доступные тесты{% endblock %}
+{% block title %}Главная{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
+{% block header %}
+<h1 style="text-align: center;">Какой-то текст</h1>
+<p style="text-align: center;">И еще (потом придумаю зачем)</p>
+{% endblock %}
 
 {% block content %}
-<a class="btn btn-primary" href="/quiz/start/1">Пройти тест номер 1</a>
-<a class="btn btn-secondary" href="/quiz/start/1">Пройти тест номер 2</a>
+  {{ super() }}
 {% endblock %}

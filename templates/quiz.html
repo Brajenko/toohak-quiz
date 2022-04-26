@@ -6,20 +6,27 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="container align-content-center justify-content-center" style="width: 100vw; height: 100vh">
-  <h2>{{question['question']}}</h2>
-  
-  {% for row in question['rows'] %}
-  <div class="row">
-    {% for col in row %}
-    <form action="/quiz" enctype="application/json" method="POST">
-      <input type="hidden" name="answer" value={{ col }}>
-      <input type="submit" class="col btn btn-primary btn-quiz btn-lg" value={{ col }}>
-    </form>
+<div class="jumbotron vertical-center">
+  <div class="container text-center" style="width: 100vw; height: 100vh">
+    <div class="row">
+      <h2 class="col">
+        {{ question['question'] }}
+      </h2>
+    </div>
+    
+    {% for row in question['rows'] %}
+    <div class="row">
+      {% for col in row %}
+      <form action="/quiz" enctype="application/json" method="POST">
+        <input type="hidden" name="answer" value="{{ col }}">
+        <input type="submit" class="col btn btn-primary" value="{{ col }}">
+      </form>
+      {% endfor %}
+    </div>
     {% endfor %}
+    <!-- <div class="row progress">
+      <div class="progress-bar w-75" role="progressbar" aria-valuenow="{{ curr }}" aria-valuemin="0" aria-valuemax="{{ length }}"></div>
+    </div> -->
   </div>
-  {% endfor %}
-
 </div>
 {% endblock %}

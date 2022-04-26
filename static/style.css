@@ -1,5 +1,6 @@
 .btn-quiz {
-    margin: 3%;
+    height: 5rem;
+    width: 2rem;
 }
 
 h2 {
@@ -13,3 +14,11 @@ h2 {
 #quiz-form {
     margin: 1rem;
 }
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+    display: flex;
+    align-items: center;
+  }

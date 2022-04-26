@@ -19,6 +19,7 @@ class Quiz(SqlAlchemyBase):
     creator = sqlalchemy.Column(sqlalchemy.Integer, 
                                 sqlalchemy.ForeignKey("users.id"), nullable=False)
     user = orm.relation('User')
+    completions = orm.relation("Completion", back_populates='quiz')
     
     def get_questions(self):
         return json.loads(self.questions)
