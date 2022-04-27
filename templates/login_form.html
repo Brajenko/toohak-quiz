@@ -3,24 +3,21 @@
 {% block content %}
 {{ super() }}
 {% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div>
+{% if cat == 'error' %}
+<div class="alert alert-danger" role="alert">
+  {{msg}}
+</div>
+{% else %}
+<div class="alert alert-success" role="alert">
+  {{msg}}
+</div>
+{% endif %}
 {% endfor %}
 <form action="/login" method="post" class="form-login">
 {{ form.hidden_tag() }}
-{% for field in form if field.name not in ['csrf_token', 'remember', 'submit'] -%}
-         <p>{{ field.label() }}
-         {% if field.errors %}
-                   {{ field(class="invalid") }}
-         <span class="invalid-feedback">
-                   {% for e in field.errors %}
-                   {{ e }}
-                   {% endfor %}
-         </span>
-         {% else %}
-                   {{ field() }}
-         {% endif %}
-{% endfor %}
+<p> {{ form.login.label() }} {{ form.login() }}
+<p> {{ form.password.label() }} {{ form.password() }}
 <p> {{ form.submit() }}
-<a href="{{url_for('register')}}" class="link-primary">Регистрация</a>
 </form>
+<a href="{{url_for('register')}}" class="link-primary">Регистрация</a>
 {% endblock %}

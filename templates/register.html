@@ -4,10 +4,23 @@
 {{ super() }}
 <form action="/register" method="post" class="form-register">
     {{ form.hidden_tag() }}
+{% for cat, msg in get_flashed_messages(True) %}
+{% if cat == 'error' %}
+<div class="alert alert-danger" role="alert">
+  {{msg}}
+</div>
+{% else %}
+<div class="alert alert-success" role="alert">
+  {{msg}}
+</div>
+{% endif %}
+{% endfor %}
+<form action="/register" method="post" class="form-register">
 <p> {{ form.login.label() }} {{ form.login() }}
 <p> {{ form.email.label() }} {{ form.email() }}
 <p> {{ form.password.label() }} {{ form.password() }}
 <p> {{ form.repeated_password.label() }} {{ form.repeated_password() }}
 <p> {{ form.submit() }}
+<a href="{{url_for('login')}}" class="link-primary"> Есть аккаунт? Авторизация. </a>
 </form>
 {% endblock %}

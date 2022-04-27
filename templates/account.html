@@ -2,5 +2,28 @@
 
 {% block content %}
 {{ super() }}
-<h1> Это html шаблон аккаунта!</h1>
+{% for cat, msg in get_flashed_messages(True) %}
+{% if cat == 'error' %}
+<div class="alert alert-danger" role="alert">
+  {{msg}}
+</div>
+{% else %}
+<div class="alert alert-success" role="alert">
+  {{msg}}
+</div>
+{% endif %}
+{% endfor %}
+<h2>Основные данные профиля</h2>
+<h3>
+  <small class="text-muted">Nickname:</small>
+  {{ current_user.login }}
+</h3>
+<h3>
+  <small class="text-muted">Email:</small>
+  {{ current_user.email }}
+</h3>
+<h3>
+  <small class="text-muted">Общее кол-во очков:</small>
+  {{ current_user.points }}
+</h3>
 {% endblock %}

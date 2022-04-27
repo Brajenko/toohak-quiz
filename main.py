@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
-from forms import LoginForm, RegisterForm
-from flask_login import (LoginManager, current_user, login_required, login_user, logout_user)
-from flask_bcrypt import Bcrypt
+from flask import (Flask, flash, make_response, redirect, render_template,
+                   request, session, url_for)
+from flask_login import (LoginManager, current_user, login_required,
+                         login_user, logout_user)
 
-from manage_db import (add_new_quiz, add_new_user, get_quiz_by_id, get_user_by_id)
+from forms import *
+from manage_db import *
+from data.users import Anonymous
+from form_examination import *
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-app.config['SECRET_KEY'] = 'lol'
+app.config['SECRET_KEY'] = 'ULTRAMEGASECRETKEY'
 
 
 @login_manager.user_loader
@@ -19,23 +22,31 @@ def load_user(user_id):
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    # Логирование - пробный вариант
     form = LoginForm()
-    if form.validate_on_submit():
-        # test
-        if form.email.data != 'saq':
-            # test
-            flash('AAAAAA', 'error')
+    if request.method == "POST":
+        user = get_user_by_login(form.login.data)
+        if get_user_by_login(form.login.data):
+            if user.check_password(form.password.data):
+                login_user(get_user_by_login(form.login.data))
+                return redirect(url_for('account'))
+            else:
+                flash('Ошибка: неверный пароль.', 'error')
+        else:
+            flash('Ошибка: неверная пара логин пароль.', 'error')
     return render_template('login_form.html', form=form, title='Логин')
 
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
-        # test
-        add_new_user(form)
-        return redirect(url_for('login'))
+    if request.method == "POST":
+        try:
+            if check_form(form) == 0:
+                add_new_user(form)
+                flash('Успещная регистрация!', 'success')
+                return redirect(url_for('login'))
+        except:
+            flash('Ошибка: на данный login уже зарегестрирован пользователь.', 'error')
     return render_template('register.html', form=form, title='Регистрация')
 
 
@@ -43,6 +54,13 @@ def register():
 @login_required
 def account():
     return render_template('account.html', title='Аккаунт')
+
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
 
 
 def main():
