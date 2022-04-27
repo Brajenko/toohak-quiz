@@ -167,8 +167,3 @@ def add_quiz():
 @app.login_manager.unauthorized_handler
 def unauth_handler():
     return '''<h1>Для выполнения этого действия нужно <a href="/register">зарегистрироваться</a> или <a href="/login">войти</a></h1>'''
-
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
