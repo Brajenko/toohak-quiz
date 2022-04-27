@@ -15,7 +15,7 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
-app.config['SECRET_KEY'] = 'ULTRAMEGASECRETKEY'
+app.config['SECRET_KEY'] = '7768efa191c4a3e53bfb5f974c0340c825a9f422c3ea270999f618e2cd9a59df'
 app.config["PORT"] = int(os.environ.get("PORT", 8000))
 
 
@@ -171,4 +171,4 @@ def unauth_handler():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8080', debug=True)
+    app.run(host='0.0.0.0')
