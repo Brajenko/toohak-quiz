@@ -1,3 +1,5 @@
+import os
+
 from flask import (Flask, flash, redirect, render_template,
                    request, session, url_for)
 from flask_login import (LoginManager, current_user, login_required,
@@ -14,6 +16,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
 app.config['SECRET_KEY'] = 'ULTRAMEGASECRETKEY'
+app.config["PORT"] = int(os.environ.get("PORT", 8000))
+
 
 
 def check_quiz(handler):
