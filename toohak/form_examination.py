@@ -1,4 +1,4 @@
-from forms import RegisterForm
+from toohak.forms import RegisterForm
 from flask import flash
 import string
 

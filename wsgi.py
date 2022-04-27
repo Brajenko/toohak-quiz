@@ -1,4 +1,4 @@
-from toohak import app
+from toohak.app import app
 
 
 if __name__ == "__main__":

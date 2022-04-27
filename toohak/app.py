@@ -5,10 +5,10 @@ from flask import (Flask, flash, redirect, render_template,
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
 
-from forms import *
-from manage_db import *
-from data.users import Anonymous
-from form_examination import *
+from toohak.forms import *
+from toohak.manage_db import *
+from toohak.data.users import Anonymous
+from toohak.form_examination import *
 
 
 app = Flask(__name__)
@@ -17,6 +17,7 @@ login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
 app.config['SECRET_KEY'] = '7768efa191c4a3e53bfb5f974c0340c825a9f422c3ea270999f618e2cd9a59df'
 app.config["PORT"] = int(os.environ.get("PORT", 8000))
+global_init('toohak/db/users.db')
 
 
 
