@@ -1,1 +1,1 @@
-web: guincorn wsgi:toohak
+web: python wsgi.py
