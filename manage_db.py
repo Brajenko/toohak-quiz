@@ -32,13 +32,17 @@ def get_user_by_email(email:str) -> User:
     return session.query(User).filter(User.email == email).first()
 
 
+def get_user_by_login(login) -> User:
+    global_init("db/users.db")
+    session = create_session()
+    return session.query(User).filter(User.login == login).first()
+
+
 def increase_user_pts(user_id, n):
     global_init("db/users.db")
     session = create_session()
     user = session.query(User).get(user_id)
     user.points = user.points + float(n)
-    print(n)
-    print(user.points)
     session.commit()
 
 

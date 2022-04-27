@@ -1,4 +1,4 @@
-from flask import (Flask, flash, make_response, redirect, render_template,
+from flask import (Flask, flash, redirect, render_template,
                    request, session, url_for)
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
@@ -6,6 +6,8 @@ from flask_login import (LoginManager, current_user, login_required,
 from forms import *
 from manage_db import *
 from data.users import Anonymous
+from form_examination import *
+
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -16,7 +18,7 @@ app.config['SECRET_KEY'] = 'ULTRAMEGASECRETKEY'
 
 def check_quiz(handler):
     def better_handler(*args, **kwargs):
-        if session.get('is_quiz_going', False):
+        if session.get('is_quiz_going', False) and current_user.is_authenticated:
             return redirect('/quiz')
         return handler(*args, **kwargs)
     better_handler.__name__ = handler.__name__
@@ -32,10 +34,14 @@ def load_user(user_id):
 @check_quiz
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
-        print(form.data)
-        add_new_user(form)
-        return redirect(url_for('login'))
+    if request.method == "POST":
+        try:
+            if check_form(form) == 0:
+                add_new_user(form)
+                flash('Успещная регистрация!', 'success')
+                return redirect(url_for('login'))
+        except:
+            flash('Ошибка: на данный login уже зарегестрирован пользователь.', 'error')
     return render_template('register.html', form=form, title='Регистрация')
 
 
@@ -43,12 +49,17 @@ def register():
 @check_quiz
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        login_user(get_user_by_email(form.email.data), remember=True)
-        return redirect('/')
-        # if form.email.data != 'saq':
-        #     flash('AAAAAA', 'error')
-    return render_template('login_form.html', form=form, title='Логин')    
+    if request.method == "POST":
+        user = get_user_by_login(form.login.data)
+        if get_user_by_login(form.login.data):
+            if user.check_password(form.password.data):
+                login_user(get_user_by_login(form.login.data))
+                return redirect(url_for('account'))
+            else:
+                flash('Ошибка: неверный пароль.', 'error')
+        else:
+            flash('Ошибка: неверная пара логин пароль.', 'error')
+    return render_template('login_form.html', form=form, title='Логин')  
 
 
 @app.route("/account", methods=["POST", "GET"])
