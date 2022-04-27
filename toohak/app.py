@@ -16,7 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
 app.config['SECRET_KEY'] = '7768efa191c4a3e53bfb5f974c0340c825a9f422c3ea270999f618e2cd9a59df'
-app.config["PORT"] = int(os.environ.get("PORT", 8000))
 global_init('toohak/db/users.db')
 
 
