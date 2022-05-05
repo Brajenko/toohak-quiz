@@ -1,1 +1,1 @@
-uwsgi --wsgi-file wsgi.py --http 0.0.0.0:5000
+web: python wsgi.py
