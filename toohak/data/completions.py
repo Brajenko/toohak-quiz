@@ -6,6 +6,7 @@ from .db_session import SqlAlchemyBase
 
 
 class Completion(SqlAlchemyBase):
+    """Модель для попытки прохождения теста"""
     __tablename__ = 'completions'
     
     id = sqlalchemy.Column(sqlalchemy.Integer,

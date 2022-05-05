@@ -11,6 +11,7 @@ from toohak.data.users import Anonymous
 from toohak.form_examination import *
 
 
+# CONFIG
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -19,7 +20,7 @@ app.config['SECRET_KEY'] = '7768efa191c4a3e53bfb5f974c0340c825a9f422c3ea270999f6
 global_init('toohak/db/users.db')
 
 
-
+# Decorator for checking is quiz running
 def check_quiz(handler):
     def better_handler(*args, **kwargs):
         if session.get('is_quiz_going', False) and current_user.is_authenticated:
@@ -37,6 +38,7 @@ def load_user(user_id):
 @app.route("/register", methods=["POST", "GET"])
 @check_quiz
 def register():
+    """Register page"""
     form = RegisterForm()
     if request.method == "POST":
         try:
@@ -52,6 +54,7 @@ def register():
 @app.route("/login", methods=["POST", "GET"])
 @check_quiz
 def login():
+    """login page"""
     form = LoginForm()
     if request.method == "POST":
         user = get_user_by_login(form.login.data)
@@ -70,12 +73,14 @@ def login():
 @login_required
 @check_quiz
 def account():
+    """account page"""
     return render_template('account.html', title='Аккаунт')
 
 
 @app.route('/logout', methods=['GET'])
 @login_required
 def logout():
+    """for logout"""
     if session.get('is_quiz_going', False):
         end_test_passing()
     logout_user()
@@ -85,6 +90,7 @@ def logout():
 @app.route('/', methods=['GET'])
 @check_quiz
 def index():
+    """index page"""
     return render_template('index.html', quizes=get_all_quizes_for_page(current_user.id))
 
 
@@ -92,6 +98,8 @@ def index():
 @login_required
 @check_quiz
 def start_quiz(quiz_id):
+    """This function starts quiz and redirect user to the quiz page
+    you can't pass your own test"""
     quiz = get_quiz_by_id(quiz_id)
     if quiz.creator == current_user.id:
         return redirect('/')
@@ -107,7 +115,10 @@ def start_quiz(quiz_id):
 @app.route('/quiz', methods=['GET', 'POST'])
 @login_required
 def quiz():
+    """Page for quiz completing
+    Checks is answer right, counts user's points"""
     if 'is_quiz_going' not in session or not session['is_quiz_going']:
+        #if there is no quizes
         return 'Нет запущенных тестов, запустите новый на <a href="/">Главной странице</a>'
     
     if request.method == 'POST':
@@ -115,6 +126,7 @@ def quiz():
             session['score'] += 1
         session['curr_question'] += 1
         if session['curr_question'] == len(session['questions']):
+            # if quiz ends
             end_test_passing()
             author_id = get_quiz_by_id(session['quiz_id']).user.id
             return render_template('results.html', res=session['score'], quizes=get_all_quizes_for_page(author_id, by_user=True))
@@ -130,10 +142,13 @@ def quiz():
 @app.route('/leaderboard')
 @check_quiz
 def leaderboard():
+    """Leaderboard page"""
     return render_template('leaderboard.html', leaders=get_leaders())
 
 
 def end_test_passing():
+    """function that ends test passing
+    setting all vars back to default"""
     session['is_quiz_going'] = False
     max_prev_completion = get_max_completion(current_user.get_id(), session['quiz_id'])
     questions_n = len(session['questions'])
@@ -156,6 +171,7 @@ def end_test_passing():
 @login_required
 @check_quiz
 def add_quiz():
+    """adding quiz page"""
     form = AddQuizForm()
     if form.validate_on_submit():
         add_new_quiz(form, current_user)

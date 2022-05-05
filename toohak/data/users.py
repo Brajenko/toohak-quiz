@@ -10,6 +10,7 @@ from .db_session import SqlAlchemyBase
 
 
 class User(SqlAlchemyBase, UserMixin):
+    """Класс пользователя для бд"""
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -30,6 +31,8 @@ class User(SqlAlchemyBase, UserMixin):
 
 
 class Anonymous(AnonymousUserMixin):
+    """Анонимный пользователь для фласк логина
+    нужен для юзернейма и айди, без него ошибка при рендере хедера в шаблонах"""
     def __init__(self):
         self.id = 0
         self.username = 'Guest'

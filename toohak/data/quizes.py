@@ -9,6 +9,7 @@ from .db_session import SqlAlchemyBase
 VARIANTS_IN_ROW = 4
 
 class Quiz(SqlAlchemyBase):
+    """класс теста в бд"""
     __tablename__ = 'quizes'
     
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -22,9 +23,11 @@ class Quiz(SqlAlchemyBase):
     completions = orm.relation("Completion", back_populates='quiz')
     
     def get_questions(self):
+        """Возвращает все вопросы теста в формате JSON"""
         return json.loads(self.questions)
 
     def add_questions(self, json_questions):
+        """Парсер вопросов из json и добавление в бд"""
         questions = json.loads(json_questions)
         for question in questions:
             all_variants = question['variants'] + [question['answer']]

@@ -1,3 +1,5 @@
+<!-- шаблон для добавления новых тестов -->
+
 {% extends 'base.html' %}
 
 {% block title %}Добавить тест{% endblock %}
@@ -52,6 +54,8 @@
         let questions = 0
 
         function addNewAns(index) {
+          // функция для добавления поля для нового варианта ответа
+          // активируется при нажатии кнопки
           let input = document.createElement("input");
           input.className = "col form-control form-control-sm ans-input";
           input.type = "text";
@@ -63,6 +67,8 @@
         }
 
         function addNewQuestion() {
+          // функция для добавления поля для нового варианта вопроса
+          // активируется при нажатии кнопки
           questions += 1;
           let question = document.createElement("div");
           question.className = "question container";
@@ -87,6 +93,7 @@
         }
 
         function collectQuestions() {
+          // функция для представления всех введенных пользователем вопросов в json
           let all_questions = Array();
           for (let i = 0; i < questions + 1; i++) {
             let variants = Array();
@@ -102,6 +109,7 @@
         }
 
         function postQuiz() {
+          // записывает ответы и отправляет на бэкенд
           document.getElementById("questions").value = collectQuestions();
           document.getElementById("submit").click()
         }
